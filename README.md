@@ -8,7 +8,3 @@ Manage your Tello drone with Node.JS!
 3. connect your pc to Tello drone via wifi
 4. `npm run dev`
 5. go to https://localhost:3000
-
-
-## License
--
