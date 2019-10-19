@@ -1,0 +1,23 @@
+body {
+    background-color: #a6efff!important;
+}
+
+.interface {
+    padding: 20px;
+}
+
+.progress {
+    margin-top: 10px;
+    width: 50%;
+}
+
+.progress,
+.progress-bar {
+    height: 2rem!important;
+}
+
+.camera {
+    background-color: black;
+    width: 500px;
+    height: 500px;
+}
