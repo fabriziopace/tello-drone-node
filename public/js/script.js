@@ -17,6 +17,30 @@ const startStreaming = async function() {
     });
 };
 
+const connectToDrone = async function() {
+    await fetch('/connect', { method: 'POST' });
+};
+
+const takeOff = async function() {
+    await fetch('/takeoff', { method: 'POST' });
+}
+
+const land = async function() {
+    await fetch('/land', { method: 'POST' });
+}
+
+const up = async function() {
+    await fetch('/up', { method: 'POST' });
+}
+
+const down = async function() {
+    await fetch('/down', { method: 'POST' });
+}
+
+const battery = async function() {
+    await fetch('/battery', { method: 'POST' });
+}
+
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init)
 } else {

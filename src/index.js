@@ -4,6 +4,7 @@ const app = express();
 const Tello = require('./tello');
 const { spawn } = require('child_process');
 const ws = require('ws');
+const sdkTello = require('tellojs');
 
 const telloHost = '192.168.10.1';
 const telloPortCamera = 11111;
@@ -33,11 +34,57 @@ app.post('/streamoff', async(req, res) => {
 });
 
 // Ws Tello streaming
-app.post(`/streaming`, (req, res) => {
+app.post('/streaming', (req, res) => {
     res.connection.setTimeout(0);
     req.on('data', function(data) {
         webSocket.broadcast(data)
     });
+});
+
+ // Connect to Tello Drone
+  app.post('/connect', async(req, res) => {
+    try {
+        sdkTello.control.connect();
+        res.send(200);
+    } catch (e) {
+        res.status(500).send(e);
+    }
+  });
+
+// TakeOff 
+app.post('/takeoff', async(req, res) => {
+    try {        
+        await sdkTello.control.takeOff();
+    } catch (e) {
+        res.status(500).send(e);
+    }
+});
+
+// Land
+app.post('/land', async(req,res) => {
+    try {        
+        await sdkTello.control.land();
+    } catch (e) {
+        res.status(500).send(e);
+    }
+});
+
+// Up
+app.post('/up', async(req,res) => {
+    try {        
+        await sdkTello.control.move.up(20);
+    } catch (e) {
+        res.status(500).send(e);
+    }
+});
+
+// Down
+app.post('/down', async(req,res) => {
+    try {        
+        await sdkTello.control.move.down(20);
+    } catch (e) {
+        res.status(500).send(e);
+    }
 });
 
 // Interface

@@ -1,23 +1,25 @@
 body {
-    background-color: #a6efff!important;
+    background-color: #121212!important;
 }
 
 .interface {
     padding: 20px;
 }
 
-.progress {
-    margin-top: 10px;
-    width: 50%;
-}
-
-.progress,
-.progress-bar {
-    height: 2rem!important;
-}
-
-.camera {
+#tellocamera {
     background-color: black;
-    width: 500px;
-    height: 500px;
+    width: 100%;
+    height: 100%;
+}
+
+.tilebutton {
+    width: 40%;
+    height: 60px;
+    margin: 5px;
+    background: #373737!important;
+    color: #c3c3c3!important;
+}
+
+.controlsection {
+    padding-left: 0px!important;
 }
