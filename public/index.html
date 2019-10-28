@@ -16,14 +16,28 @@
             </div>
 
             <div class="col-sm-3 controlsection">
-                <button type="button" class="btn btn-default tilebutton" onclick="takeOff()">Take Off</button>
-                <button type="button" class="btn btn-default tilebutton" onclick="land()">Land</button>
-                <button type="button" class="btn btn-default tilebutton" onclick="up()">Up 20</button>
-                <button type="button" class="btn btn-default tilebutton" onclick="down()">Down 20</button>
-                <button type="button" class="btn btn-default tilebutton" disabled>Flip Left</button>
-                <button type="button" class="btn btn-default tilebutton" disabled>Flip Right</button>
-                <button type="button" class="btn btn-default tilebutton" disabled>Rotate Left</button>
-                <button type="button" class="btn btn-default tilebutton" disabled>Rotate Right</button>
+                <div class="row">
+                    <div class="status">
+                        <div class="statusdrone">Status: 
+                            <p class="statusDisconnected">Disconnected</p>
+                            <p class="statusConnected">Connected</p>
+                        </div>
+                    </div>
+                    <div class="battery">
+                            <p>Battery 0%</p>
+                        <div class="batterylevel"></div>
+                    </div>
+                </div>
+                <div class="row">
+                    <button id="btnTakeOff" type="button" class="btn btn-default tilebutton" disabled>Take Off</button>
+                    <button id="btnLand" type="button" class="btn btn-default tilebutton" disabled>Land</button>
+                    <button id="btnUp" type="button" class="btn btn-default tilebutton" disabled>Up 20</button>
+                    <button id="btnDown" type="button" class="btn btn-default tilebutton" disabled>Down 20</button>
+                    <button id="btnTakePicture" type="button" class="btn btn-default tilebutton" disabled>Take Picture</button>
+                    <button id="btnStreamOn" type="button" class="btn btn-default tilebutton" disabled>Stream On</button>
+                    <button id="btnRotateLeft" type="button" class="btn btn-default tilebutton" disabled>Rotate Left</button>
+                    <button id="btnRotateRight" type="button" class="btn btn-default tilebutton" disabled>Rotate Right</button>
+                </div>
             </div>
         </div>
     </div>
@@ -34,6 +48,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
+    <script src="/socket.io/socket.io.js"></script>
 
     <script src="js/jsmpeg.min.js"></script>
     <script src='js/script.js'></script>

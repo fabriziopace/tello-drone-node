@@ -1,37 +1,27 @@
 const path = require('path');
+const http = require('http');
 const express = require('express');
+const socketio = require('socket.io');
+const sdk = require('tellojs');
+
 const app = express();
-const Tello = require('./tello');
+const server = http.createServer(app);
+const io = socketio(server);
+
 const { spawn } = require('child_process');
 const ws = require('ws');
-const sdkTello = require('tellojs');
 
 const telloHost = '192.168.10.1';
 const telloPortCamera = 11111;
 const localPort = 3000;
 const localHost = 'localhost';
+const wsPort = 3002;
 
 // Define paths for Express config
 const publicDirectoryPath = path.join(__dirname, '../public');
 
-// Create new instance of tello class
-const tello = new Tello();
-
 // Setup static directory to serve
 app.use(express.static(publicDirectoryPath));
-
-// Open Tello camera and start streaming
-app.post(`/streamon`, async(req, res) => {
-    await tello.sendCommand('command');
-    await tello.sendCommand('streamon');
-    res.end()
-});
-
-// Close Tello camera
-app.post('/streamoff', async(req, res) => {
-    await tello.sendCommand('command');
-    await tello.sendCommand('streamoff');
-});
 
 // Ws Tello streaming
 app.post('/streaming', (req, res) => {
@@ -41,62 +31,64 @@ app.post('/streaming', (req, res) => {
     });
 });
 
- // Connect to Tello Drone
-  app.post('/connect', async(req, res) => {
-    try {
-        sdkTello.control.connect();
-        res.send(200);
-    } catch (e) {
-        res.status(500).send(e);
-    }
-  });
+io.on('connection', (socket) => {
+    console.log('New websocket connection');
 
-// TakeOff 
-app.post('/takeoff', async(req, res) => {
-    try {        
-        await sdkTello.control.takeOff();
-    } catch (e) {
-        res.status(500).send(e);
-    }
-});
+    socket.on('connection', async () => {
+        try {
+            await sdk.control.connect();
+            const battery = await sdk.read.battery();
+            socket.emit('isConnected', true, battery);
+        } catch (error) {
+            socket.emit('isConnected', false, 0);
+        }
+    });
 
-// Land
-app.post('/land', async(req,res) => {
-    try {        
-        await sdkTello.control.land();
-    } catch (e) {
-        res.status(500).send(e);
-    }
-});
+    socket.on('command', async (params) => {
+        try {
+            switch (params.name) {
+                case 'takeoff':
+                    await sdk.control.takeOff();
+                    break;
+                case 'land':
+                    await sdk.control.land();
+                    break;
+                case 'up':
+                    await sdk.control.move.up(params.val);
+                    break;
+                case 'down':
+                    await sdk.control.move.down(params.val);
+                    break;
+            }
+        } catch (error) {
+            socket.emit('commandError', error);
+        }
+    });
 
-// Up
-app.post('/up', async(req,res) => {
-    try {        
-        await sdkTello.control.move.up(20);
-    } catch (e) {
-        res.status(500).send(e);
-    }
-});
+    socket.on('streamon', async () => {
+        try {
+            const bindVideo = async () => {
+                const videoEmitter = await sdk.receiver.video.bind();
+                videoEmitter.on('message', msg => {
+                    webSocket.broadcast(msg)
+                });
+            };
+            sdk.control.connect()
+                .then(() => bindVideo())
+                .then((result) => console.log(result))
+                .catch((error) => console.error(error))
+        } catch (error) {
+            socket.emit('commandError', error);
+        }
+    });
 
-// Down
-app.post('/down', async(req,res) => {
-    try {        
-        await sdkTello.control.move.down(20);
-    } catch (e) {
-        res.status(500).send(e);
-    }
-});
-
-// Interface
-app.get('/', (req, res) => {
-    res.render('index');
 });
 
 // Express server
-const server = app.listen(localPort, localHost);
+server.listen(localPort, localHost);
 
 // WebSocket Server for stream Tello Camera
-const webSocket = new ws.Server({ server });
+const webSocket = new ws.Server({ port: wsPort, host: localHost });
 
 // WebSocket Server Broadcast, when the video data is sent to client 
 webSocket.broadcast = function(data) {
