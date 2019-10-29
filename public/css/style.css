@@ -6,11 +6,28 @@ body {
     padding: 20px;
 }
 
+.cameraoff {
+    background-color: black;
+    width: 100%;
+    height: 300px;
+    display:block;
+    z-index:2;
+}
+.cameraoff p {
+    font-size: 15px;
+    text-transform: uppercase;
+    color: #bdbdbd;
+    text-align: center;
+}
+
 #tellocamera {
     background-color: black;
     width: 100%;
     height: 100%;
+    z-index:1;
+    display: none;
 }
+
 
 .tilebutton {
     width: 40%;
@@ -51,12 +68,18 @@ body {
     width: 83%;
 }
 
-.status {
+.status, .height {
     color: white;
     margin: 5px;
     height: 20px;
     font-size: 13px;
     text-transform: uppercase;
+}
+
+.heightLevel {
+    float: right;
+    padding: 5px;
+    line-height: 0.7;
 }
 
 .statusDisconnected {

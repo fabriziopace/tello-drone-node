@@ -5,8 +5,22 @@ const $btnTakeOff = document.querySelector('#btnTakeOff');
 const $btnLand = document.querySelector('#btnLand');
 const $btnUp = document.querySelector('#btnUp');
 const $btnDown = document.querySelector('#btnDown');
-const $btnTakePicture = document.querySelector('#btnTakePicture');
 const $btnStreamOn = document.querySelector('#btnStreamOn');
+const $btnStreamOff = document.querySelector('#btnStreamOff');
+const $btnRoute1 = document.querySelector('#btnRoute1');
+
+const $statusDisconnected = $('.statusDisconnected');
+const $statusConnected = $('.statusConnected');
+const $cameraoff = $('.cameraoff');
+const $tellocamera = $('#tellocamera');
+
+const $batteryText = $('.battery > p');
+const $batterylevel = $('.batterylevel');
+const $heightLevel = $('.heightLevel');
+
+let barcodeAlreadyScanned = [];
+let audioSuccess = new Audio('./sounds/ok.wav');
+
 
 async function init() {
     connect();
@@ -56,8 +70,28 @@ $btnStreamOn.addEventListener('click', () => {
         videoBufferSize: 512 * 1024,
         preserveDrawingBuffer: true
     });
-    
+
     socket.emit('streamon');
+    $cameraoff.hide();
+    $tellocamera.show();
+
+    setInterval(() => {
+        var base64png = $tellocamera[0].toDataURL('image/png').replace(/^data:image\/png;base64,/, "");
+        socket.emit('detectbarcode', {
+            base64png
+        });
+    }, 100);
+});
+
+$btnStreamOff.addEventListener('click', () => {
+    socket.emit('streamoff');
+
+    $cameraoff.show();
+    $tellocamera.hide();
+});
+
+$btnRoute1.addEventListener('click', () => {
+    socket.emit('route1');
 });
 
 const toggleButtons = (enable) => {
@@ -65,21 +99,24 @@ const toggleButtons = (enable) => {
     $btnLand.disabled = enable;
     $btnUp.disabled = enable;
     $btnDown.disabled = enable;
-    $btnTakePicture.disabled = enable;
     $btnStreamOn.disabled = enable;
+    $btnStreamOff.disabled = enable;
+    $btnRoute1.disabled = enable;
 };
 
-socket.on('isConnected', (status, battery) => {
+socket.on('isConnected', (status, battery, height) => {
     if (status) {
-        $('.statusDisconnected').hide();
-        $('.statusConnected').show();
+        $statusDisconnected.hide();
+        $statusConnected.show();
     } else {
-        $('.statusConnected').hide();
-        $('.statusDisconnected').show();
+        $statusConnected.hide();
+        $statusDisconnected.show();
     }
 
-    $('.battery > p').text(`Battery ${battery.toString().trim('')}%`);
-    $('.batterylevel').width(`${battery.toString().trim('')}%`)
+    $batteryText.text(`Battery ${battery.toString().trim('')}%`);
+    $batterylevel.width(`${battery.toString().trim('')}%`)
+
+    $heightLevel.text(height.toString().trim(''));
 
     toggleButtons(!status);
 
@@ -87,6 +124,11 @@ socket.on('isConnected', (status, battery) => {
 
 socket.on('commandError', (error) => {
     console.log(error);
+});
+
+socket.on('newbarcodescanned', (barcode) => {
+    barcodeAlreadyScanned.push(barcode);
+    audioSuccess.play();
 });
 
 if (document.readyState === 'loading') {

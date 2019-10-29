@@ -12,6 +12,7 @@
     <div class="interface container-fluid">
         <div class="row content">
             <div class="col-sm-9">
+                <div class="cameraoff"><p>Tello Camera Off</p></div>
                 <canvas id="tellocamera"></canvas>
             </div>
 
@@ -23,6 +24,11 @@
                             <p class="statusConnected">Connected</p>
                         </div>
                     </div>
+                    <div class="height">
+                        <div class="labelHeight">Height: 
+                            <p class="heightLevel">0</p>
+                        </div>                       
+                    </div>
                     <div class="battery">
                             <p>Battery 0%</p>
                         <div class="batterylevel"></div>
@@ -33,9 +39,9 @@
                     <button id="btnLand" type="button" class="btn btn-default tilebutton" disabled>Land</button>
                     <button id="btnUp" type="button" class="btn btn-default tilebutton" disabled>Up 20</button>
                     <button id="btnDown" type="button" class="btn btn-default tilebutton" disabled>Down 20</button>
-                    <button id="btnTakePicture" type="button" class="btn btn-default tilebutton" disabled>Take Picture</button>
                     <button id="btnStreamOn" type="button" class="btn btn-default tilebutton" disabled>Stream On</button>
-                    <button id="btnRotateLeft" type="button" class="btn btn-default tilebutton" disabled>Rotate Left</button>
+                    <button id="btnStreamOff" type="button" class="btn btn-default tilebutton" disabled>Stream Off</button>
+                    <button id="btnRoute1" type="button" class="btn btn-default tilebutton" disabled>Route 1</button>
                     <button id="btnRotateRight" type="button" class="btn btn-default tilebutton" disabled>Rotate Right</button>
                 </div>
             </div>
