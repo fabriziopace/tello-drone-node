@@ -1,8 +1,18 @@
 # Tello Drone with Node.JS
+
+![](img-1.PNG)
+
 Manage your Tello drone with Node.JS!
 
-# Warning
+## Warning
 Use at your own risk, test commands with the props removed first.
+
+## Created with
+1. Node.JS
+2. Bootstrap
+3. FFmpeg
+4. ZBar
+5. DJI Tello EDU
 
 ## Installation
 1. Install `Node.JS` https://nodejs.org/en/
