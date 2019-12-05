@@ -1,8 +1,7 @@
 # Tello Drone with Node.JS
+Manage your Tello drone with Node.JS!
 
 ![](img-1.PNG)
-
-Manage your Tello drone with Node.JS!
 
 ## Warning
 Use at your own risk, test commands with the props removed first.
