@@ -3,7 +3,7 @@ Manage your Tello drone with Node.JS!
 
 ![](img-1.PNG)
 
-![](warehouse-drone-barcode.jpg.PNG)
+![](warehouse-drone-barcode.jpg)
 
 ## Warning
 Use at your own risk, test commands with the props removed first.
