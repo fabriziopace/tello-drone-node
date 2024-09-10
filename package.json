@@ -11,7 +11,7 @@
     "license": "ISC",
     "dependencies": {
         "dgram": "^1.0.1",
-        "express": "^4.19.2",
+        "express": "^4.20.0",
         "socket.io": "^2.5.0",
         "tellojs": "^0.1.47",
         "ws": "^7.5.10"
